@@ -53,7 +53,7 @@ function updateProposalStatus(req, res) {
 function sendProposals(req,res) {
     let proposalId = req.params.id;
     // let template
-    console.log("snding Proposals - ");
+    console.log("snding Proposals - "); 
 }
 
 exports.getClientProposals = getClientProposals;

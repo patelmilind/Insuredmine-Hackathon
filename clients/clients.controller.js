@@ -3,7 +3,7 @@
 //  import uniqid from 'uniqid';
 //  var agents = require('../agents.json')
  
- let allClients = [{"test data":"test value"}];
+ let allClients = [];
 
  
  // Gets a list of clients added in an agent
