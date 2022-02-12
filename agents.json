@@ -1,0 +1,17 @@
+[
+    {
+         "name":"aditya",
+         "email":"adityasahu@insuredmine.com",
+         "password":"aditya123"
+    },
+    {
+        "name":"milind",
+        "email":"milind@insuredmine.com",
+        "password":"milind123"
+    },
+    {
+        "name":"shivam",
+        "email":"shivam@insuredmine.com",
+        "password":"shivam123"
+    }
+ ]
