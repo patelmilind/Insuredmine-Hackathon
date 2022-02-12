@@ -50,10 +50,11 @@ function updateProposalStatus(req, res) {
     //update the status of the proposal to accepted
 }
 
-// function sendProposals(req,res) {
-//     let proposalId = req.params.id;
-//     let template
-// }
+function sendProposals(req,res) {
+    let proposalId = req.params.id;
+    // let template
+    console.log("snding Proposals - ");
+}
 
 exports.getClientProposals = getClientProposals;
 exports.create = create;
