@@ -194,9 +194,14 @@ function extractFromPdf(req,res) {
     // pdfParser.loadPDF(__dirname + '/acord_cert_sample_filled.pdf');
 }
 
+function getallProposals(req,res) {
+    res.send(savedProposals);
+}
+
 exports.getClientProposals = getClientProposals;
 exports.create = create;
 exports.getProposal = getProposal;
 exports.updateProposalStatus = updateProposalStatus;
 exports.sendProposals = sendProposals;
+exports.getallProposals = getallProposals;
 exports.extractFromPdf = extractFromPdf;
