@@ -51,21 +51,22 @@ function getProposal(req, res) {
 
     for(let i=0;i<formHead.length;i++)
     {
-        formHeadHtml += `<p>${formHead[i]}</p></br>`;
+        formHeadHtml += `${formHead[i]}`;
     }
     for(let i=0;i<currentRes.length;i++)
     {
-        formcurrentHtml += `<p>${currentRes[i]}</p></br>`;
+        formcurrentHtml += `${currentRes[i]}`;
     }
     for(let i=0;i<recommendedRes.length;i++)
     {
-        formrecommendedHtml += `<p>${recommendedRes[i]}</p></br>`;
+        formrecommendedHtml += `${recommendedRes[i]}`;
     }
-    
+    let note = current.note;
+    let discount = parseInt(current['Total Cost']) - parseInt(recommendedRes['Total Cost']);
     const templatePath = __dirname + '/templates/home/h1.html';
     const html = fs.readFileSync(templatePath, 'utf8');
     let template = handlebars.compile(html);
-    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHeadHtml:formHeadHtml, formcurrentHtml:formcurrentHtml, formrecommendedHtml:formrecommendedHtml});
+    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHeadHtml:formHeadHtml, formcurrentHtml:formcurrentHtml, formrecommendedHtml:formrecommendedHtml,note:note,discount:discount});
     console.log("finalTemplate --> ",finalTemplate);
     res.send({"data":finalTemplate});
 }
