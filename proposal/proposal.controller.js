@@ -1,15 +1,17 @@
 'use strict';
 // import uniqid from 'uniqid';
 const uniqid = require('uniqid');
-const fs = require('fs');
+var fs = require('fs');
 const handlebars = require('handlebars');
 const request = require("request");
 const pdf = require('pdf-parse');
+// var PDFParser = require("pdf2json");
+// var PDFParser = require("pdf2json/pdfparser");
 
 let category = ['Home','Auto'];
 
 let savedProposals = [];
-let ngrok = 'https://e47d-103-127-20-132.ngrok.io';
+let ngrok = 'https://af11-103-127-20-132.ngrok.io';
 // Gets a list of proposal for the client
 function getClientProposals(req, res) {
     let clientId = req.params.id;
@@ -37,10 +39,33 @@ function getProposal(req, res) {
     console.log("response id = ",req.params._id);
     let proposalData = savedProposals.filter(ele => ele._id == req.params.id);
     console.log("proposalData --",proposalData);
+    proposalData = proposalData[0];
+    let current = proposalData.formRes.current;
+    let recommended = proposalData.formRes.recommended;
+    let formHead = Object.keys(current); //['provider','test2']
+    let currentRes = Object.values(current);
+    let recommendedRes = Object.values(recommended);
+    let formHeadHtml = '';
+    let formcurrentHtml = '';
+    let formrecommendedHtml = '';
+
+    for(let i=0;i<formHead.length;i++)
+    {
+        formHeadHtml += `<p>${formHead[i]}</p></br>`;
+    }
+    for(let i=0;i<currentRes.length;i++)
+    {
+        formcurrentHtml += `<p>${currentRes[i]}</p></br>`;
+    }
+    for(let i=0;i<recommendedRes.length;i++)
+    {
+        formrecommendedHtml += `<p>${recommendedRes[i]}</p></br>`;
+    }
+    
     const templatePath = __dirname + '/templates/home/h1.html';
     const html = fs.readFileSync(templatePath, 'utf8');
     let template = handlebars.compile(html);
-    const finalTemplate = template({ insuranceType: proposalData[0].category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}` });
+    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHeadHtml:formHeadHtml, formcurrentHtml:formcurrentHtml, formrecommendedHtml:formrecommendedHtml});
     console.log("finalTemplate --> ",finalTemplate);
     res.send({"data":finalTemplate});
 }
@@ -48,6 +73,9 @@ function getProposal(req, res) {
 function updateProposalStatus(req, res) {
     let proposalId = req.params.id;
     console.log("proposalId --> ",proposalId," was accepted by client!!");
+    // savedProposals.map(ele => {
+    //     if(ele.)
+    // });
     //update the status of the proposal to accepted
 }
 
@@ -94,7 +122,7 @@ function sendProposals(req,res) {
 
 function extractFromPdf(req,res) {
 
-  let dataBuffer = fs.readFileSync(__dirname + '/auto-example.pdf');
+//   let dataBuffer = fs.readFileSync(__dirname + '/acord_cert_sample_filled.pdf');
  
     pdf(dataBuffer).then(function(data) {
     
@@ -110,9 +138,35 @@ function extractFromPdf(req,res) {
         // check https://mozilla.github.io/pdf.js/getting_started/
         // console.log(data.version);
         // PDF text
-        console.log("PDF text --> ",data.text); 
+        console.log("PDF text --> ",data.text);
+        res.send(data.text);
             
     });
+
+    // var pdfParser = new PDFParser();
+
+    // pdfParser.on("pdfParser_dataError", errData => console.error(errData.parserError) );
+    // pdfParser.on("pdfParser_dataReady", pdfData => {
+    //     fs.writeFile(__dirname + '/auto-example.json', JSON.stringify(pdfParser.getAllFieldsTypes()), ()=>{console.log("Done.");});
+    // });
+
+    // pdfParser.loadPDF(__dirname + '/acord_cert_sample_filled.pdf');
+
+    // var pdfParser = new PDFParser();
+
+    // pdfParser.on("pdfParser_dataError", function (errData) { console.error(errData) });
+    // pdfParser.on("pdfParser_dataReady", function (pdfData) {
+    // var pJSON = JSON.stringify({"formImage": pdfData.data});
+
+    //     fs.writeFile(__dirname + '/auto-example.json', pJSON, function (err) {
+    //         if(err) {
+    //             console.error("parsing error: ", err);
+    //         } else {
+    //             console.log("parsing succeeded");
+    //         }
+    //     });
+    // });
+    // pdfParser.loadPDF(__dirname + '/acord_cert_sample_filled.pdf');
 }
 
 exports.getClientProposals = getClientProposals;
