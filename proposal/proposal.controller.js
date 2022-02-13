@@ -45,7 +45,8 @@ function getProposal(req, res) {
     let formHead = Object.keys(current); //['provider','test2']
     formHead = formHead.filter(ele => ele != "note");
     let currentRes = Object.values(current);
-    currentRes.splice(-1);
+    // currentRes.splice(-1);
+    recommended.splice(-1);
     let recommendedRes = Object.values(recommended);
     // let formHeadHtml = '';
     // let formcurrentHtml = '';
@@ -63,7 +64,7 @@ function getProposal(req, res) {
     // {
     //     formrecommendedHtml += `${recommendedRes[i]}`;
     // }
-    let note = current.note;
+    let note = recommended.note;
     let discount = parseInt(current['Total Cost']) - parseInt(recommended['Total Cost']);
     const templatePath = __dirname + '/templates/home/h1.html';
     const html = fs.readFileSync(templatePath, 'utf8');
