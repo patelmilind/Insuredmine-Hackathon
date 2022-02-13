@@ -42,7 +42,7 @@ function getProposal(req, res) {
     let template = handlebars.compile(html);
     const finalTemplate = template({ insuranceType: proposalData[0].category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}` });
     console.log("finalTemplate --> ",finalTemplate);
-    res.send(finalTemplate);
+    res.send({"data":finalTemplate});
 }
 
 function updateProposalStatus(req, res) {
