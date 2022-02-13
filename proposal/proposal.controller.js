@@ -85,6 +85,7 @@ function updateProposalStatus(req, res) {
         }
     }
     console.log("proposalId --> ",proposalId," was accepted by client!!");
+    res.send("Thanks for accepting!!");
     // savedProposals.map(ele => {
     //     if(ele._id == proposalId)
 
@@ -97,10 +98,21 @@ function sendProposals(req,res) {
     let proposalData = savedProposals.filter(ele => ele._id == proposalId);
     proposalData = proposalData[0];
 
+    let current = proposalData.formRes.current;
+    let recommended = proposalData.formRes.recommended;
+    let formHead = Object.keys(current); //['provider','test2']
+    formHead = formHead.filter(ele => ele != "note");
+    let currentRes = Object.values(current);
+    // currentRes.splice(-1);
+    let recommendedRes = Object.values(recommended);
+    recommendedRes.splice(-1);
+    let note = recommended.note;
+    let discount = parseInt(current['Total Cost']) - parseInt(recommended['Total Cost']);
+
     const templatePath = __dirname + `/templates/home/${proposalData.template}.html`;
     const html = fs.readFileSync(templatePath, 'utf8');
     let template = handlebars.compile(html);
-    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}` });
+    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHead:formHead,currentRes:currentRes,recommendedRes:recommendedRes,note:note,discount:discount});
     console.log("finalTemplate --> ",finalTemplate);
     // let template
     let endPoint = 'https://api.nylas.com/send';
