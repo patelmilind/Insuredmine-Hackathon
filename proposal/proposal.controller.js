@@ -46,8 +46,8 @@ function getProposal(req, res) {
     formHead = formHead.filter(ele => ele != "note");
     let currentRes = Object.values(current);
     // currentRes.splice(-1);
-    recommended.splice(-1);
     let recommendedRes = Object.values(recommended);
+    recommendedRes.splice(-1);
     // let formHeadHtml = '';
     // let formcurrentHtml = '';
     // let formrecommendedHtml = '';
