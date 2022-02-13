@@ -66,7 +66,7 @@ function getProposal(req, res) {
     const templatePath = __dirname + '/templates/home/h1.html';
     const html = fs.readFileSync(templatePath, 'utf8');
     let template = handlebars.compile(html);
-    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHead:formHead,note:note,discount:discount});
+    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHead:formHead,currentRes:currentRes,recommendedRes:recommendedRes,note:note,discount:discount});
     console.log("finalTemplate --> ",finalTemplate);
     res.send({"data":finalTemplate});
 }
