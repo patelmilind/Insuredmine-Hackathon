@@ -45,28 +45,28 @@ function getProposal(req, res) {
     let formHead = Object.keys(current); //['provider','test2']
     let currentRes = Object.values(current);
     let recommendedRes = Object.values(recommended);
-    let formHeadHtml = '';
-    let formcurrentHtml = '';
-    let formrecommendedHtml = '';
+    // let formHeadHtml = '';
+    // let formcurrentHtml = '';
+    // let formrecommendedHtml = '';
 
-    for(let i=0;i<formHead.length;i++)
-    {
-        formHeadHtml += `${formHead[i]}`;
-    }
-    for(let i=0;i<currentRes.length;i++)
-    {
-        formcurrentHtml += `${currentRes[i]}`;
-    }
-    for(let i=0;i<recommendedRes.length;i++)
-    {
-        formrecommendedHtml += `${recommendedRes[i]}`;
-    }
+    // for(let i=0;i<formHead.length;i++)
+    // {
+    //     formHeadHtml += `${formHead[i]}`;
+    // }
+    // for(let i=0;i<currentRes.length;i++)
+    // {
+    //     formcurrentHtml += `${currentRes[i]}`;
+    // }
+    // for(let i=0;i<recommendedRes.length;i++)
+    // {
+    //     formrecommendedHtml += `${recommendedRes[i]}`;
+    // }
     let note = current.note;
-    let discount = parseInt(current['Total Cost']) - parseInt(recommendedRes['Total Cost']);
+    let discount = parseInt(current['Total Cost']) - parseInt(recommended['Total Cost']);
     const templatePath = __dirname + '/templates/home/h1.html';
     const html = fs.readFileSync(templatePath, 'utf8');
     let template = handlebars.compile(html);
-    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHeadHtml:formHeadHtml, formcurrentHtml:formcurrentHtml, formrecommendedHtml:formrecommendedHtml,note:note,discount:discount});
+    const finalTemplate = template({ insuranceType: proposalData.category,acceptUrl:`${ngrok}/api/proposal/acceptedTrack/${req.params.id}`,agentEmail:"milind@insuredmine.com",formHead:formHead,note:note,discount:discount});
     console.log("finalTemplate --> ",finalTemplate);
     res.send({"data":finalTemplate});
 }
