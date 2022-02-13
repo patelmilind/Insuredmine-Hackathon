@@ -72,9 +72,18 @@ function getProposal(req, res) {
 
 function updateProposalStatus(req, res) {
     let proposalId = req.params.id;
+    
+    for(let k=0;k<savedProposals.length;k++)
+    {
+        if(savedProposals[k]._id == proposalId)
+        {
+            savedProposals[k]['status'] = "Accepted";
+        }
+    }
     console.log("proposalId --> ",proposalId," was accepted by client!!");
     // savedProposals.map(ele => {
-    //     if(ele.)
+    //     if(ele._id == proposalId)
+
     // });
     //update the status of the proposal to accepted
 }
