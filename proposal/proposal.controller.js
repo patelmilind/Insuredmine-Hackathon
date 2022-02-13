@@ -43,7 +43,9 @@ function getProposal(req, res) {
     let current = proposalData.formRes.current;
     let recommended = proposalData.formRes.recommended;
     let formHead = Object.keys(current); //['provider','test2']
+    formHead = formHead.filter(ele => ele != "note");
     let currentRes = Object.values(current);
+    currentRes.splice(-1);
     let recommendedRes = Object.values(recommended);
     // let formHeadHtml = '';
     // let formcurrentHtml = '';
