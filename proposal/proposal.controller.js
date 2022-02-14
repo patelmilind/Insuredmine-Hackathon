@@ -8,9 +8,9 @@ const pdf = require('pdf-parse');
 // var PDFParser = require("pdf2json");
 // var PDFParser = require("pdf2json/pdfparser");
 
-let category = ['Home','Auto'];
-
 let savedProposals = [];
+let savedMessage = [];
+
 let ngrok = 'https://af11-103-127-20-132.ngrok.io';
 // Gets a list of proposal for the client
 function getClientProposals(req, res) {
@@ -48,22 +48,7 @@ function getProposal(req, res) {
     // currentRes.splice(-1);
     let recommendedRes = Object.values(recommended);
     recommendedRes.splice(-1);
-    // let formHeadHtml = '';
-    // let formcurrentHtml = '';
-    // let formrecommendedHtml = '';
 
-    // for(let i=0;i<formHead.length;i++)
-    // {
-    //     formHeadHtml += `${formHead[i]}`;
-    // }
-    // for(let i=0;i<currentRes.length;i++)
-    // {
-    //     formcurrentHtml += `${currentRes[i]}`;
-    // }
-    // for(let i=0;i<recommendedRes.length;i++)
-    // {
-    //     formrecommendedHtml += `${recommendedRes[i]}`;
-    // }
     let note = recommended.note;
     let discount = parseInt(current['Total Cost']) - parseInt(recommended['Total Cost']);
     const templatePath = __dirname + '/templates/home/h1.html';
@@ -139,6 +124,16 @@ function sendProposals(req,res) {
             //res.status(503).send({"message":"Something went wrong, Please re-connect your account from setting!"});
         }
         else {
+
+            for(let i=0;i<savedProposals.length;i++)
+            {
+                if(savedProposals[i]._id == proposalData._id)
+                {
+                    savedProposals[i]['message_id'] = body.id;
+                    savedProposals[i]['openCount'] = 0;
+                }
+            }
+            
             res.send(JSON.stringify(body));
         }
         
@@ -198,6 +193,45 @@ function getallProposals(req,res) {
     res.send(savedProposals);
 }
 
+function nylaswebhookmailopened (req, res) {
+
+    if (req.query.challenge) {
+        res.send(req.query.challenge)
+    } else {
+        console.log("nylasmailopned webhook");
+        // console.log("sdfsdf", JSON.stringify(req.body))
+
+        try {
+            if (req.body.deltas) {
+                if (req.body.deltas.length > 0) {
+                    let data = req.body.deltas[0];
+                    let message_id = data.object_data.metadata.message_id;
+                    // get the message on message_id an update the count of mailopned - 
+                    for(let k=0;k<savedProposals.length;k++)
+                    {
+                        if(savedProposals[k].message_id == message_id)
+                        {
+                            let openCount = parseInt(savedProposals[k]['openCount']) + 1;
+                            savedProposals[k]['openCount']  = openCount;
+                            savedProposals[k]['lastOpenTime'] = new Date(data.date * 1000).toISOString();
+                        }
+                    }
+                    res.status(200).send();  
+                }
+                else {
+                    res.status(200).send(); 
+                }
+            } else {
+                res.status(200).send();
+            }
+        }
+        catch (err) {
+            res.status(200).send();
+        }
+    }
+
+}
+
 exports.getClientProposals = getClientProposals;
 exports.create = create;
 exports.getProposal = getProposal;
@@ -205,3 +239,4 @@ exports.updateProposalStatus = updateProposalStatus;
 exports.sendProposals = sendProposals;
 exports.getallProposals = getallProposals;
 exports.extractFromPdf = extractFromPdf;
+exports.nylaswebhookmailopened = nylaswebhookmailopened;

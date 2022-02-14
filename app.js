@@ -45,6 +45,7 @@ app.get('/serverTest', function (req, res) {
 
 app.use('/api/client', require('./clients/index'));
 app.use('/api/proposal', require('./proposal/index'));
+app.use('/api/form', require('./forms/index'));
 
 var server = app.listen(9000, function () {
    var host = server.address().address

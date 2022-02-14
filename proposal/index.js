@@ -1,7 +1,7 @@
 'use strict';
 
 var express = require('express');
-var {getClientProposals, create, getProposal, updateProposalStatus, sendProposals, extractFromPdf, getallProposals} = require('./proposal.controller');
+var {getClientProposals, create, getProposal, updateProposalStatus, sendProposals, extractFromPdf, getallProposals, nylaswebhookmailopened } = require('./proposal.controller');
 
 var router = express.Router();
 
@@ -15,5 +15,7 @@ router.get('/', getallProposals);
 // router.put('/:id', controller.upsert);
 // router.patch('/:id', controller.patch);
 // router.delete('/:id', controller.destroy);
+router.get('/nylas/nylaswebhook/mailopened', nylaswebhookmailopened);
+router.post('/nylas/nylaswebhook/mailopened', nylaswebhookmailopened);
 
 module.exports = router;
