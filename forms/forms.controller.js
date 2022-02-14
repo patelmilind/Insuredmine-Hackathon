@@ -26,6 +26,7 @@ function getForm (req,res) {
             let components = allForms[i].components;
             if(components && components.length > 0 )
             {
+                components.splice(-1);
                 for(let j=0;j<components.length;j++)
                 {
                     let label = components[j].label;

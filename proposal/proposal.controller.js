@@ -70,7 +70,7 @@ function updateProposalStatus(req, res) {
         }
     }
     console.log("proposalId --> ",proposalId," was accepted by client!!");
-    res.send("Thanks for accepting!!");
+    res.status(200).send({"message":"Thanks for accepting!"});
     // savedProposals.map(ele => {
     //     if(ele._id == proposalId)
 
